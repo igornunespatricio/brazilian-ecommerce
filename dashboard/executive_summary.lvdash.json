@@ -1,0 +1,665 @@
+{
+  "datasets": [
+    {
+      "name": "c20c7004",
+      "displayName": "gold_sales_summary",
+      "config": {
+        "version": "1.1",
+        "source": "brazilian_ecommerce.prod.gold_sales_summary",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "216a02e4",
+      "displayName": "gold_delivery_performance",
+      "config": {
+        "version": "1.1",
+        "source": "brazilian_ecommerce.prod.gold_delivery_performance",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a3ee280b",
+      "displayName": "on time delivered pct",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ROUND(\r\n",
+        "    COUNT(CASE WHEN delivery_status = 'on_time' THEN 1 END)\r\n",
+        "    / COUNT(CASE WHEN delivery_status IS NOT NULL THEN 1 END),\r\n",
+        "    4\r\n",
+        "  ) AS pct_delivered_on_time\r\n",
+        "FROM brazilian_ecommerce.prod.gold_sales_summary"
+      ],
+      "catalog": "brazilian_ecommerce",
+      "schema": "prod"
+    },
+    {
+      "name": "2f4e12ad",
+      "displayName": "gold_category_review_scores",
+      "config": {
+        "version": "1.1",
+        "source": "brazilian_ecommerce.prod.gold_category_review_scores",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "c605aa4a",
+      "displayName": "repeat customer rate",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ROUND(\r\n",
+        "    COUNT(CASE WHEN total_orders > 1 THEN 1 END) / COUNT(*),\r\n",
+        "    4\r\n",
+        "  ) AS repeat_customer_rate\r\n",
+        "FROM brazilian_ecommerce.prod.gold_customer_summary"
+      ]
+    },
+    {
+      "name": "a4b70e5e",
+      "displayName": "gold_revenue_by_category_month",
+      "config": {
+        "version": "1.1",
+        "source": "brazilian_ecommerce.prod.gold_revenue_by_category_month",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "ec895e5f",
+      "displayName": "Summary",
+      "layout": [
+        {
+          "widget": {
+            "name": "orders-per-payment-type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c20c7004",
+                  "fields": [
+                    {
+                      "name": "primary_payment_type",
+                      "expression": "`primary_payment_type`"
+                    },
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Orders per Payment Type",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "primary_payment_type",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(count)",
+                  "axis": {
+                    "hideLabels": true,
+                    "hideTitle": true,
+                    "hideGrid": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f2a44a86",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 24px;\">Executive Summary</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "total-orders-value",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c20c7004",
+                  "fields": [
+                    {
+                      "name": "sum(total_order_value)",
+                      "expression": "SUM(`total_order_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block\"><span style=\"font-size: 18px;\">Total Orders Value</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_order_value)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    },
+                    "negativeSign": "standard"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "17932c94",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c20c7004",
+                  "fields": [
+                    {
+                      "name": "countdistinct(order_id)",
+                      "expression": "COUNT(DISTINCT `order_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block\"><span style=\"font-size:18px\">Total Orders</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(order_id)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    },
+                    "negativeSign": "standard"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 1,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "9767f54f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a3ee280b",
+                  "fields": [
+                    {
+                      "name": "pct_delivered_on_time",
+                      "expression": "`pct_delivered_on_time`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block\"><span style=\"font-size:18px\">% Orders Delivered On Time</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "pct_delivered_on_time",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    },
+                    "negativeSign": "standard"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 1,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "review-scores-per-product-category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2f4e12ad",
+                  "fields": [
+                    {
+                      "name": "product_category_name_english",
+                      "expression": "`product_category_name_english`"
+                    },
+                    {
+                      "name": "avg_review_score",
+                      "expression": "`avg_review_score`"
+                    },
+                    {
+                      "name": "total_reviews",
+                      "expression": "`total_reviews`"
+                    },
+                    {
+                      "name": "pct_low_reviews",
+                      "expression": "`pct_low_reviews`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "IN_RANGE(`total_reviews`, NULL, NULL)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Review scores Per Product Category</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "product_category_name_english"
+                  },
+                  {
+                    "fieldName": "avg_review_score",
+                    "displayName": "Average Review Score"
+                  },
+                  {
+                    "fieldName": "total_reviews",
+                    "displayName": "Total Reviews"
+                  },
+                  {
+                    "fieldName": "pct_low_reviews",
+                    "format": {
+                      "type": "number-percent",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 2
+                      },
+                      "hideGroupSeparator": true
+                    },
+                    "headerTooltip": "Low Reviews is considered 1 or 2",
+                    "displayName": "% Low Reviews"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#11171C"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "eb3e83b8",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c605aa4a",
+                  "fields": [
+                    {
+                      "name": "repeat_customer_rate",
+                      "expression": "`repeat_customer_rate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block\"><span style=\"font-size:18px\">Repeat Customer Rate</span></span>",
+                  "fields": []
+                },
+                "description": {
+                  "value": "<span style=\"text-align:center;display:block\"><span style=\"font-size: 12px;\">% Customers with 2 or more orders</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "repeat_customer_rate",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    },
+                    "negativeSign": "standard"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue-by-month",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a4b70e5e",
+                  "fields": [
+                    {
+                      "name": "year_month",
+                      "expression": "`year_month`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 18px;\">Revenue By Month</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "lineShape": "linear",
+                "marker": {
+                  "shape": "circle"
+                }
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "year_month",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 21,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "affabbf5",
+            "queries": [
+              {
+                "name": "dashboards/01f1bd3f617b14f19590945a78a2f832/datasets/01f1be04bfc5161fad6f86567e4648ee_product_category_name_english",
+                "query": {
+                  "datasetName": "a4b70e5e",
+                  "fields": [
+                    {
+                      "name": "product_category_name_english",
+                      "expression": "`product_category_name_english`"
+                    },
+                    {
+                      "name": "product_category_name_english_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "product_category_name_english",
+                    "queryName": "dashboards/01f1bd3f617b14f19590945a78a2f832/datasets/01f1be04bfc5161fad6f86567e4648ee_product_category_name_english"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 4,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "930e34c3",
+      "displayName": "Global Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
