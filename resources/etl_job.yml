@@ -131,6 +131,20 @@ resources:
           notebook_task:
             notebook_path: ../src/staging_to_gold/gold_category_review_scores.ipynb
 
+        - task_key: refresh_dashboard
+          depends_on:
+            - task_key: gold_sales_summary
+            - task_key: gold_revenue_by_category_month
+            - task_key: gold_revenue_by_seller
+            - task_key: gold_delivery_performance
+            - task_key: gold_delivery_by_region
+            - task_key: gold_customer_summary
+            - task_key: gold_product_performance
+            - task_key: gold_category_review_scores
+          dashboard_task:
+            dashboard_id: ${resources.dashboards.executive_summary.id}
+            warehouse_id: e086279a73f715c3
+
       schedule:
         quartz_cron_expression: "0 0 6 * * ?"
         timezone_id: "America/Sao_Paulo"
