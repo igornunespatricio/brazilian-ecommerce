@@ -260,7 +260,7 @@
           },
           "position": {
             "x": 0,
-            "y": 9,
+            "y": 10,
             "width": 12,
             "height": 6
           }
@@ -331,7 +331,7 @@
           },
           "position": {
             "x": 0,
-            "y": 1,
+            "y": 2,
             "width": 4,
             "height": 4
           }
@@ -386,7 +386,7 @@
           },
           "position": {
             "x": 4,
-            "y": 1,
+            "y": 2,
             "width": 4,
             "height": 4
           }
@@ -440,7 +440,7 @@
           },
           "position": {
             "x": 8,
-            "y": 1,
+            "y": 2,
             "width": 4,
             "height": 4
           }
@@ -530,7 +530,7 @@
           },
           "position": {
             "x": 0,
-            "y": 15,
+            "y": 16,
             "width": 12,
             "height": 5
           }
@@ -588,7 +588,7 @@
           },
           "position": {
             "x": 0,
-            "y": 5,
+            "y": 6,
             "width": 4,
             "height": 4
           }
@@ -670,7 +670,7 @@
           },
           "position": {
             "x": 0,
-            "y": 21,
+            "y": 22,
             "width": 12,
             "height": 6
           }
@@ -715,7 +715,7 @@
           },
           "position": {
             "x": 0,
-            "y": 20,
+            "y": 21,
             "width": 4,
             "height": 1
           }
@@ -800,7 +800,7 @@
           },
           "position": {
             "x": 0,
-            "y": 27,
+            "y": 28,
             "width": 12,
             "height": 6
           }
@@ -879,7 +879,7 @@
           },
           "position": {
             "x": 0,
-            "y": 33,
+            "y": 34,
             "width": 12,
             "height": 6
           }
@@ -965,7 +965,7 @@
           },
           "position": {
             "x": 4,
-            "y": 5,
+            "y": 6,
             "width": 8,
             "height": 4
           }
@@ -1047,9 +1047,274 @@
           },
           "position": {
             "x": 0,
-            "y": 39,
+            "y": 40,
             "width": 12,
             "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "delayed-orders-by-customer-state",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5cef7050",
+                  "fields": [
+                    {
+                      "name": "total_orders",
+                      "expression": "`total_orders`"
+                    },
+                    {
+                      "name": "customer_state",
+                      "expression": "`customer_state`"
+                    },
+                    {
+                      "name": "pct_delayed",
+                      "expression": "`pct_delayed`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">% Delayed Orders By Customer State</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "annotations": [
+                {
+                  "type": "horizontal-line",
+                  "encodings": {
+                    "type": "aggregate",
+                    "y": {
+                      "total": {
+                        "fn": "avg"
+                      }
+                    },
+                    "label": {
+                      "value": "Average"
+                    }
+                  }
+                }
+              ],
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "customer_state",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 10
+                    },
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "pct_delayed",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": true,
+                    "hideGrid": true
+                  },
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false,
+                  "showTotal": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "total_orders"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 45,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bottom-products-by-review-score",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e23a6154",
+                  "fields": [
+                    {
+                      "name": "total_units_sold",
+                      "expression": "`total_units_sold`"
+                    },
+                    {
+                      "name": "avg_review_score",
+                      "expression": "`avg_review_score`"
+                    },
+                    {
+                      "name": "product_id",
+                      "expression": "`product_id`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "IN_RANGE(`total_units_sold`, 100, NULL)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Bottom Products By Review Score</span>",
+                  "fields": []
+                },
+                "description": {
+                  "value": "<span style=\"text-align:center;display:block;\">Average Review for products with 100+ units sold</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "avg_review_score",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": true,
+                    "hideGrid": true
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_id",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 5
+                    },
+                    "sort": {
+                      "by": "x"
+                    }
+                  }
+                },
+                "label": {
+                  "show": false,
+                  "showTotal": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "total_units_sold"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 51,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "last-refreshed-at",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c20c7004",
+                  "fields": [
+                    {
+                      "name": "max(_loaded_at)",
+                      "expression": "MAX(`_loaded_at`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Last Refreshed At</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "max(_loaded_at)",
+                  "format": {
+                    "type": "date-time",
+                    "date": "locale-long-month",
+                    "time": "locale-hour-minute-second",
+                    "leadingZeros": false
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 12,
+            "height": 1
           }
         }
       ],
