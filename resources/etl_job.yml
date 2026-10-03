@@ -15,6 +15,12 @@ resources:
             - task_key: landing_to_bronze
           notebook_task:
             notebook_path: ../src/bronze_to_staging/customers.ipynb
+        
+        - task_key: dq_bronze_checks
+          depends_on:
+            - task_key: landing_to_bronze
+          notebook_task:
+            notebook_path: ../src/data_quality/bronze_checks.ipynb
 
         - task_key: staging_sellers
           depends_on:
@@ -63,6 +69,20 @@ resources:
             - task_key: landing_to_bronze
           notebook_task:
             notebook_path: ../src/bronze_to_staging/geolocation.ipynb
+
+        - task_key: dq_staging_checks
+          depends_on:
+            - task_key: staging_customers
+            - task_key: staging_sellers
+            - task_key: staging_orders
+            - task_key: staging_order_items
+            - task_key: staging_order_payments
+            - task_key: staging_order_reviews
+            - task_key: staging_products
+            - task_key: staging_category_translation
+            - task_key: staging_geolocation
+          notebook_task:
+            notebook_path: ../src/data_quality/staging_checks.ipynb
 
         # --- staging to gold (each depends only on the staging tables it actually reads) ---
         - task_key: gold_sales_summary
@@ -130,8 +150,8 @@ resources:
             - task_key: staging_category_translation
           notebook_task:
             notebook_path: ../src/staging_to_gold/gold_category_review_scores.ipynb
-
-        - task_key: refresh_dashboard
+        
+        - task_key: dq_gold_checks
           depends_on:
             - task_key: gold_sales_summary
             - task_key: gold_revenue_by_category_month
@@ -141,6 +161,12 @@ resources:
             - task_key: gold_customer_summary
             - task_key: gold_product_performance
             - task_key: gold_category_review_scores
+          notebook_task:
+            notebook_path: ../src/data_quality/gold_checks.ipynb
+
+        - task_key: refresh_dashboard
+          depends_on:
+            - task_key: dq_gold_checks
           dashboard_task:
             dashboard_id: ${resources.dashboards.executive_summary.id}
             warehouse_id: e086279a73f715c3
