@@ -1,0 +1,6 @@
+resources:
+  dashboards:
+    executive_summary:
+      display_name: "executive_summary"
+      warehouse_id: e086279a73f715c3
+      file_path: ../dashboard/executive_summary.lvdash.json
