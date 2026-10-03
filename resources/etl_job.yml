@@ -7,62 +7,62 @@ resources:
         # --- landing to bronze ---
         - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/landing_to_bronze.py
+            notebook_path: ../src/landing_to_bronze.ipynb
 
         # --- bronze to staging (all run in parallel after landing_to_bronze) ---
         - task_key: staging_customers
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/customers.py
+            notebook_path: ../src/bronze_to_staging/customers.ipynb
 
         - task_key: staging_sellers
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/sellers.py
+            notebook_path: ../src/bronze_to_staging/sellers.ipynb
 
         - task_key: staging_orders
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/orders.py
+            notebook_path: ../src/bronze_to_staging/orders.ipynb
 
         - task_key: staging_order_items
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/order_items.py
+            notebook_path: ../src/bronze_to_staging/order_items.ipynb
 
         - task_key: staging_order_payments
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/order_payments.py
+            notebook_path: ../src/bronze_to_staging/order_payments.ipynb
 
         - task_key: staging_order_reviews
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/order_reviews.py
+            notebook_path: ../src/bronze_to_staging/order_reviews.ipynb
 
         - task_key: staging_products
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/products.py
+            notebook_path: ../src/bronze_to_staging/products.ipynb
 
         - task_key: staging_category_translation
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/category_translation.py
+            notebook_path: ../src/bronze_to_staging/category_translation.ipynb
 
         - task_key: staging_geolocation
           depends_on:
             - task_key: landing_to_bronze
           notebook_task:
-            notebook_path: ../src/bronze_to_staging/geolocation.py
+            notebook_path: ../src/bronze_to_staging/geolocation.ipynb
 
         # --- staging to gold (each depends only on the staging tables it actually reads) ---
         - task_key: gold_sales_summary
@@ -71,7 +71,7 @@ resources:
             - task_key: staging_order_items
             - task_key: staging_order_payments
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_sales_summary.py
+            notebook_path: ../src/staging_to_gold/gold_sales_summary.ipynb
 
         - task_key: gold_revenue_by_category_month
           depends_on:
@@ -80,7 +80,7 @@ resources:
             - task_key: staging_category_translation
             - task_key: staging_orders
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_revenue_by_category_month.py
+            notebook_path: ../src/staging_to_gold/gold_revenue_by_category_month.ipynb
 
         - task_key: gold_revenue_by_seller
           depends_on:
@@ -88,20 +88,20 @@ resources:
             - task_key: staging_sellers
             - task_key: staging_orders
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_revenue_by_seller.py
+            notebook_path: ../src/staging_to_gold/gold_revenue_by_seller.ipynb
 
         - task_key: gold_delivery_performance
           depends_on:
             - task_key: staging_orders
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_delivery_performance.py
+            notebook_path: ../src/staging_to_gold/gold_delivery_performance.ipynb
 
         - task_key: gold_delivery_by_region
           depends_on:
             - task_key: staging_orders
             - task_key: staging_customers
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_delivery_by_region.py
+            notebook_path: ../src/staging_to_gold/gold_delivery_by_region.ipynb
 
         - task_key: gold_customer_summary
           depends_on:
@@ -110,7 +110,7 @@ resources:
             - task_key: staging_order_payments
             - task_key: staging_order_reviews
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_customer_summary.py
+            notebook_path: ../src/staging_to_gold/gold_customer_summary.ipynb
 
         - task_key: gold_product_performance
           depends_on:
@@ -120,7 +120,7 @@ resources:
             - task_key: staging_order_reviews
             - task_key: staging_orders
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_product_performance.py
+            notebook_path: ../src/staging_to_gold/gold_product_performance.ipynb
 
         - task_key: gold_category_review_scores
           depends_on:
@@ -129,7 +129,7 @@ resources:
             - task_key: staging_products
             - task_key: staging_category_translation
           notebook_task:
-            notebook_path: ../src/staging_to_gold/gold_category_review_scores.py
+            notebook_path: ../src/staging_to_gold/gold_category_review_scores.ipynb
 
       schedule:
         quartz_cron_expression: "0 0 6 * * ?"
